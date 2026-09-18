@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../Rdo.Dominio/Rdo.Dominio.csproj" />
+  <Project Path="../Rdo.Infra/Rdo.Infra.csproj" />
+  <Project Path="../Rdo.Service/Rdo.Service.csproj" />
+  <Project Path="RdoObra.Api.csproj" />
+</Solution>
