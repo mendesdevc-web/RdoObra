@@ -36,7 +36,7 @@ namespace Rdo.Service.Service.AuthService
 
                 UsuarioEntidade usuario = new UsuarioEntidade()
                 {
-                    Usuario = usuarioRegistro.Usuario,
+                    UsuarioNome = usuarioRegistro.Usuario,
                     Email = usuarioRegistro.Email,
                     Cargo = usuarioRegistro.Cargo,
                     SenhaHash = senhaHash,
@@ -105,7 +105,7 @@ namespace Rdo.Service.Service.AuthService
             var usuario = _context.Usuarios
                 .FirstOrDefault(userBanco =>
                     userBanco.Email == usuarioRegistro.Email ||
-                    userBanco.Usuario == usuarioRegistro.Usuario);
+                    userBanco.UsuarioNome == usuarioRegistro.Usuario);
 
             if (usuario != null)
                 return false;

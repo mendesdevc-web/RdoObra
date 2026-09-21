@@ -40,7 +40,7 @@ namespace Rdo.Service.Service.SenhaService
             {
                 new Claim("Cargo", usuario.Cargo.ToString()),
                 new Claim("Email", usuario.Email),
-                new Claim("Username", usuario.Usuario)
+                new Claim("Username", usuario.UsuarioNome)
             };
 
             var key = new SymmetricSecurityKey(
