@@ -5,6 +5,8 @@ namespace Rdo.Infra
 {
     public class ApplicationDbContext : DbContext
     {
+        public readonly IEnumerable<object> ObraUsuario;
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
         {
         }

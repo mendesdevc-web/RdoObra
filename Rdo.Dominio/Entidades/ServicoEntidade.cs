@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Rdo.Dominio.Entidades
@@ -16,8 +17,10 @@ namespace Rdo.Dominio.Entidades
         public decimal? PesoOrcamento { get; set; }
 
         // Relacionamentos
+        [JsonIgnore]
         public ObraEntidade Obra { get; set; } = null!;
 
+        [JsonIgnore]
         public ICollection<ApontamentoEntidade> Apontamentos { get; set; }
             = new List<ApontamentoEntidade>();
     }

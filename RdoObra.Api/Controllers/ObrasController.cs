@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Rdo.Dominio.Entidades;
 using Rdo.Infra;
+using Rdo.Service.DTOs;
 
 namespace RdoObra.Api.Controllers
 {
@@ -17,7 +18,7 @@ namespace RdoObra.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetObras()
+        public async Task<IActionResult> BuscarObras()
         {
             var obras = await _context.Obras
                 .AsNoTracking()
@@ -27,7 +28,7 @@ namespace RdoObra.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetObra(Guid id)
+        public async Task<IActionResult> BuscaObra(Guid id)
         {
             var obra = await _context.Obras
                 .AsNoTracking()
@@ -40,8 +41,18 @@ namespace RdoObra.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CriarObra(ObraEntidade obra)
+        public async Task<IActionResult> CriarObra(ObrasDto obraDto)
         {
+            var obra = new ObraEntidade
+            {
+                Nome = obraDto.Nome,
+                Endereco = obraDto.Endereco,
+                ResponsavelTecnico = obraDto.ResponsavelTecnico,
+                Status = obraDto.Status,
+                DataInicio = obraDto.DataInicio,
+                DataFim = obraDto.DataFim
+            };
+
             _context.Obras.Add(obra);
 
             await _context.SaveChangesAsync();
@@ -50,24 +61,23 @@ namespace RdoObra.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditarObra(Guid id, ObraEntidade obra)
+        public async Task<IActionResult> EditarObra(Guid id, ObrasDto obraDto)
         {
-            var obraExistente = await _context.Obras
-                .FirstOrDefaultAsync(o => o.Id == id);
+            var obra = await _context.Obras.FirstOrDefaultAsync(u => u.Id == id);
 
-            if (obraExistente == null)
-                return NotFound();
+            if (obra == null)
+                return NotFound("Obra não encontrata");
 
-            obraExistente.Nome = obra.Nome;
-            obraExistente.Endereco = obra.Endereco;
-            obraExistente.ResponsavelTecnico = obra.ResponsavelTecnico;
-            obraExistente.Status = obra.Status;
-            obraExistente.DataInicio = obra.DataInicio;
-            obraExistente.DataFim = obra.DataFim;
+            obra.Nome = obraDto.Nome;
+            obra.Endereco = obraDto.Endereco;
+            obra.ResponsavelTecnico = obraDto.ResponsavelTecnico;
+            obra.Status = obraDto.Status;
+            obra.DataInicio = obraDto.DataInicio;
+            obra.DataFim = obraDto.DataFim;
 
             await _context.SaveChangesAsync();
 
-            return Ok(obraExistente);
+            return Ok(obra);
         }
     }
 }

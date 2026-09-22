@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Rdo.Dominio.Entidades
@@ -15,7 +16,9 @@ namespace Rdo.Dominio.Entidades
 
 
         // Relacionamentos
+        [JsonIgnore]
         public DiarioEntidade Diario { get; set; } = null!;
+        [JsonIgnore]
         public ServicoEntidade Servico { get; set; } = null!;
     }
 }
