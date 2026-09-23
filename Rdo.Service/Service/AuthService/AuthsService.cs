@@ -1,10 +1,10 @@
 ﻿using Rdo.Dominio.Entidades;
 using Rdo.Infra;
-using Rdo.Service.DTOs;
 using Rdo.Service.DTOs.Response;
 using Rdo.Service.Service.SenhaService.SenhaService;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Rdo.Service.DTOs.Usuarios;
 
 namespace Rdo.Service.Service.AuthService
 {
@@ -32,7 +32,7 @@ namespace Rdo.Service.Service.AuthService
                     responseService.Messagem = "Email ja cadastrado";
                     return responseService;
                 }
-                _senhasService.CriarSenhaHas(usuarioRegistro.Senha, out byte[] senhaHash, out byte[] senhaSalt);
+                _senhasService.CriarSenhaHash(usuarioRegistro.Senha, out byte[] senhaHash, out byte[] senhaSalt);
 
                 UsuarioEntidade usuario = new UsuarioEntidade()
                 {

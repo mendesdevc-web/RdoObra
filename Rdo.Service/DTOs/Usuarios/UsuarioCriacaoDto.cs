@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rdo.Service.DTOs
+namespace Rdo.Service.DTOs.Usuarios
 {
     public class UsuarioCriacaoDto
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Rdo.Service.DTOs;
+using Rdo.Service.DTOs.Usuarios;
 using Rdo.Service.Service.AuthService;
 
 namespace RdoObra.Api.Controllers

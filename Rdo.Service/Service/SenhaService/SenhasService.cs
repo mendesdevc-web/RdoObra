@@ -17,7 +17,7 @@ namespace Rdo.Service.Service.SenhaService
             _config = config;
         }
 
-        public void CriarSenhaHas(string senha, out byte[] senhaHash, out byte[] senhaSalt)
+        public void CriarSenhaHash(string senha, out byte[] senhaHash, out byte[] senhaSalt)
         {
             using var hmac = new HMACSHA512();
 

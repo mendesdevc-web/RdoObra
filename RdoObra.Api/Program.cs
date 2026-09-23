@@ -2,10 +2,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Rdo.Dominio.Repository;
 using Rdo.Infra;
+using Rdo.Infra.Repository;
 using Rdo.Service.Service.AuthService;
+using Rdo.Service.Service.ObraService;
 using Rdo.Service.Service.SenhaService;
 using Rdo.Service.Service.SenhaService.SenhaService;
+using Rdo.Service.Service.UsuariosService;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -20,6 +24,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ISenhasService, SenhasService>();
 builder.Services.AddScoped<IAuthsService, AuthsService>();
+
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IObraRepository, ObraRepository>();
+
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IObraService, ObraService>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

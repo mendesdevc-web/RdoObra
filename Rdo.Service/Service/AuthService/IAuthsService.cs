@@ -1,10 +1,6 @@
-﻿using Rdo.Service.DTOs;
-using Rdo.Service.DTOs.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Rdo.Service.DTOs.Response;
+using Rdo.Service.DTOs.Usuarios;
+
 
 namespace Rdo.Service.Service.AuthService
 {

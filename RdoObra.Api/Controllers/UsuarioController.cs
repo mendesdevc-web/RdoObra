@@ -1,12 +1,8 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Rdo.Dominio.Entidades;
+﻿using Microsoft.AspNetCore.Mvc;
 using Rdo.Infra;
-using Rdo.Service.DTOs;
-using Rdo.Service.DTOs.Response;
+using Rdo.Service.DTOs.Usuarios;
 using Rdo.Service.Service.SenhaService.SenhaService;
+using Rdo.Service.Service.UsuariosService;
 
 namespace RdoObra.Api.Controllers
 {
@@ -14,76 +10,40 @@ namespace RdoObra.Api.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUsuarioService _usuarioService;
         private readonly ISenhasService _senhaService;
+        private readonly ApplicationDbContext _context;
 
-        public UsuarioController(ApplicationDbContext context, ISenhasService senhasService)
+        public UsuarioController(IUsuarioService usuarioService, ISenhasService senhasService, ApplicationDbContext context)
         {
-            _context = context;
+            _usuarioService = usuarioService;
             _senhaService = senhasService;
+            _context = context;
         }
 
         [HttpGet]
         public async Task<IActionResult> BuscarUsuarios()
         {
-            var usuarios = await _context.Usuarios
-                .AsNoTracking()
-                .ToListAsync();
+            var resultado = await _usuarioService.BuscarUsuarios();
 
-            return Ok(usuarios);
+            return Ok(resultado);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CriarUsuario(UsuarioCriacaoDto usuarioDto)
+        public async Task<IActionResult> CriarUsuario(UsuarioCriacaoDto usuarioCriacaoDto)
         {
-            if (usuarioDto.Senha != usuarioDto.ConfirmarSenha)
-                return BadRequest("As senhas não coincidem");
+            var resultado = await _usuarioService.CriarUsuario(usuarioCriacaoDto);
 
-            //Gerando senha hash e salt
-            _senhaService.CriarSenhaHas(usuarioDto.Senha, out byte[] senhaHash, out byte[] senhaSalt);
-
-            var usuario = new UsuarioEntidade
-            {
-                UsuarioNome = usuarioDto.Usuario,
-                Email = usuarioDto.Email,
-                Cargo = usuarioDto.Cargo,
-                SenhaHash = senhaHash,
-                SenhaSalt = senhaSalt,
-                TokenDataCriacao = DateTime.Now
-            };
-
-            _context.Usuarios.Add(usuario);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(usuario);
+            return Ok(resultado);
         }
 
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditarUsuario(int id, UsuarioCriacaoDto usuarioDto)
+        public async Task<IActionResult> EditarUsuario(int id, UsuarioEditarDto usuarioDto)
         {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+            var resultado = await _usuarioService.EditarUsuario(id, usuarioDto);
 
-            if (usuario == null)
-                return NotFound("Usuário não encontrado.");
-
-            // Verifica se as senhas coincidem
-            if (usuarioDto.Senha != usuarioDto.ConfirmarSenha)
-                return BadRequest("As senhas não coincidem.");
-
-            usuario.UsuarioNome = usuarioDto.Usuario;
-            usuario.Email = usuarioDto.Email;
-            usuario.Cargo = usuarioDto.Cargo;
-
-            _senhaService.CriarSenhaHas(usuarioDto.Senha, out byte[] senhaHash,out byte[] senhaSalt);
-
-            usuario.SenhaHash = senhaHash;
-            usuario.SenhaSalt = senhaSalt;
-            usuario.TokenDataCriacao = DateTime.Now;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(usuario);
+            return Ok(resultado);
         }
     }
 }
