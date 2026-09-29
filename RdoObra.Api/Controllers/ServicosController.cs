@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Rdo.Dominio.Entidades;
 using Rdo.Infra;
 using Rdo.Service.DTOs;
+using Rdo.Service.Service.ServicoService;
 
 namespace RdoObra.Api.Controllers
 {
@@ -10,96 +11,42 @@ namespace RdoObra.Api.Controllers
     [ApiController]
     public class ServicosController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IServicoService _servicoService;
 
-        public ServicosController(ApplicationDbContext context)
+        public ServicosController(IServicoService servicoService)
         {
-            _context = context;
+            _servicoService = servicoService;
         }
 
         [HttpGet("{obraId}/servicos")]
         public async Task<IActionResult> GetServicos(Guid obraId)
         {
-            var servicos = await _context.Servicos
-                .AsNoTracking()
-                .Where(s => s.ObraId == obraId)
-                .ToListAsync();
+            var resultado = await _servicoService.BuscarServicosPorObra(obraId);
 
-            return Ok(servicos);
+            return Ok(resultado);
         }
 
         [HttpPost("{obraId}/servicos")]
         public async Task<IActionResult> CriarServico(Guid obraId,ServicosDto servicoDto)
         {
-            var obra = await _context.Obras
-                .FirstOrDefaultAsync(o => o.Id == obraId);
+            var resultado = await _servicoService.CriarServico(obraId, servicoDto);
 
-            if (obra == null)
-                return NotFound("Obra não encontrada.");
-
-            var servico = new ServicoEntidade
-            {
-                ObraId = obraId,
-                Descricao = servicoDto.Descricao,
-                UnidadeMedida = servicoDto.UnidadeMedida,
-                QuantidadeOrcada = servicoDto.QuantidadeOrcada,
-                PesoOrcamento = servicoDto.PesoOrcamento
-            };
-
-            _context.Servicos.Add(servico);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(servico);
+            return Ok(resultado);
         }
 
         [HttpPut("{obraId}/servicos/{id}")]
-        public async Task<IActionResult> EditarServico(Guid obraId, Guid id,ServicosDto servicoDto)
+        public async Task<IActionResult> EditarServico(Guid obraId, Guid idServico, ServicosDto servicoDto)
         {
-            // Procura o serviço dentro da obra informada
-            var servico = await _context.Servicos
-                .FirstOrDefaultAsync(s =>
-                    s.Id == id &&
-                    s.ObraId == obraId);
+            var resultado = await _servicoService.EditarServico(obraId, idServico, servicoDto);
+            return Ok(resultado);
 
-            if (servico == null)
-                return NotFound("Serviço não encontrado.");
-
-            servico.Descricao = servicoDto.Descricao;
-            servico.UnidadeMedida = servicoDto.UnidadeMedida;
-            servico.QuantidadeOrcada = servicoDto.QuantidadeOrcada;
-            servico.PesoOrcamento = servicoDto.PesoOrcamento;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(servico);
         }
 
-        [HttpDelete("{obraId}/servicos/{id}")]
-        public async Task<IActionResult> ExcluirServico(Guid obraId, Guid id)
+         [HttpDelete("{obraId}/servicos/{id}")]
+        public async Task<IActionResult> ExcluirServico(Guid obraId, Guid idServico)
         {
-            // Procura o serviço dentro da obra
-            var servico = await _context.Servicos
-                .FirstOrDefaultAsync(s =>
-                    s.Id == id &&
-                    s.ObraId == obraId);
-
-            if (servico == null)
-                return NotFound("Serviço não encontrado.");
-
-            // Verifica se o serviço possui apontamentos
-            var possuiApontamentos = await _context.Apontamentos
-                .AnyAsync(a => a.ServicoId == id);
-
-            if (possuiApontamentos)
-                return BadRequest("Não é possível excluir o serviço porque existem apontamentos vinculados.");
-
-            // Remove o serviço
-            _context.Servicos.Remove(servico);
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var resultado = await _servicoService.ExcluirServico(obraId, idServico);
+            return Ok(resultado);
         }
     }
 }

@@ -2,5 +2,6 @@
   <Project Path="../Rdo.Dominio/Rdo.Dominio.csproj" />
   <Project Path="../Rdo.Infra/Rdo.Infra.csproj" />
   <Project Path="../Rdo.Service/Rdo.Service.csproj" />
+  <Project Path="../RdoObra.View/RdoObra.View.csproj" Id="bff6fff8-78d6-4ddf-b25e-5c259c5ae4f8" />
   <Project Path="RdoObra.Api.csproj" />
 </Solution>

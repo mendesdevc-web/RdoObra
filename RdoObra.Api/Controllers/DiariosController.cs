@@ -117,8 +117,8 @@ namespace RdoObra.Api.Controllers
             if (diario == null)
                 return NotFound("Diário não encontrado.");
 
-            if (diario.Status != "rascunho" &&
-                diario.Status != "devolvido")
+            if (diario.Status == "rascunho"  ||
+                diario.Status == "devolvido")
             {
                 return BadRequest(
                     "O diário só pode ser enviado quando estiver como rascunho ou devolvido.");

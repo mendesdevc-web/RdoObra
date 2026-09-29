@@ -7,8 +7,10 @@ using Rdo.Infra;
 using Rdo.Infra.Repository;
 using Rdo.Service.Service.AuthService;
 using Rdo.Service.Service.ObraService;
+using Rdo.Service.Service.ObraUsuarioService;
 using Rdo.Service.Service.SenhaService;
 using Rdo.Service.Service.SenhaService.SenhaService;
+using Rdo.Service.Service.ServicoService;
 using Rdo.Service.Service.UsuariosService;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
@@ -27,10 +29,14 @@ builder.Services.AddScoped<IAuthsService, AuthsService>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IObraRepository, ObraRepository>();
+builder.Services.AddScoped<IServicoRepository, ServicoRepository>();
+builder.Services.AddScoped<IObraUsuarioRepository, ObraUsuarioRepository>();
+builder.Services.AddScoped<IDiarioRepository, DiarioRepository>();
 
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IObraService, ObraService>();
-
+builder.Services.AddScoped<IServicoService, ServicoService>();
+builder.Services.AddScoped<IObrasUsuarioService, ObrasUsuarioService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
